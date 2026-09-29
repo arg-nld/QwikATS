@@ -1,12 +1,15 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.api.jobs import router as jobs_router
+
 
 app = FastAPI(
     title="ATS API",
     description="API-first Applicant Tracking System",
     version="0.1.0",
 )
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -17,28 +20,13 @@ app.add_middleware(
 )
 
 
+# API routers
+app.include_router(jobs_router)
+
+
 @app.get("/health")
 def health_check():
     return {
         "status": "ok"
     }
 
-
-@app.get("/api/jobs")
-def get_jobs():
-    return [
-        {
-            "id": 1,
-            "title": "Software Engineer",
-            "department": "Engineering",
-            "location": "Manila, Philippines",
-            "employment_type": "Full-time",
-        },
-        {
-            "id": 2,
-            "title": "Data Analyst",
-            "department": "Data",
-            "location": "Remote",
-            "employment_type": "Full-time",
-        },
-    ]

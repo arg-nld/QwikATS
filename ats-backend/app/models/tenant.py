@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from sqlalchemy import DateTime, String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database.connection import Base
 
@@ -9,7 +9,10 @@ from app.database.connection import Base
 class Tenant(Base):
     __tablename__ = "tenants"
 
-    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    id: Mapped[int] = mapped_column(
+        primary_key=True,
+        index=True,
+    )
 
     name: Mapped[str] = mapped_column(
         String(255),
@@ -34,4 +37,10 @@ class Tenant(Base):
         default=datetime.utcnow,
         onupdate=datetime.utcnow,
         nullable=False,
+    )
+
+    jobs = relationship(
+        "Job",
+        back_populates="tenant",
+        cascade="all, delete-orphan",
     )
