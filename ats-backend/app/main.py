@@ -16,11 +16,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.get("/health")
 def health_check():
     return {
         "status": "ok"
     }
+
 
 @app.get("/api/jobs")
 def get_jobs():
