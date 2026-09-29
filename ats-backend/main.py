@@ -8,11 +8,6 @@ app = FastAPI(
     version="0.1.0",
 )
 
-
-# --------------------------------------------------
-# CORS
-# --------------------------------------------------
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -21,21 +16,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-# --------------------------------------------------
-# Health Check
-# --------------------------------------------------
-
 @app.get("/health")
 def health_check():
     return {
         "status": "ok"
     }
-
-
-# --------------------------------------------------
-# Mock Jobs Endpoint
-# --------------------------------------------------
 
 @app.get("/api/jobs")
 def get_jobs():
