@@ -44,3 +44,9 @@ class Tenant(Base):
         back_populates="tenant",
         cascade="all, delete-orphan",
     )
+
+    candidates = relationship(
+    "Candidate",
+    back_populates="tenant",
+    cascade="all, delete-orphan",
+)
