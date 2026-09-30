@@ -5,6 +5,8 @@ from app.api.tenants import router as tenants_router
 from app.api.jobs import router as jobs_router
 from app.api.candidates import router as candidates_router
 from app.api.applications import router as applications_router
+from app.api.scoring import router as scoring_router
+
 
 
 app = FastAPI(
@@ -28,6 +30,7 @@ app.include_router(tenants_router)
 app.include_router(jobs_router)
 app.include_router(candidates_router)
 app.include_router(applications_router)
+app.include_router(scoring_router)
 
 
 @app.get("/health")

@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import DateTime, ForeignKey, String
+from sqlalchemy import DateTime, ForeignKey, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database.connection import Base
@@ -43,6 +43,22 @@ class Candidate(Base):
     resume_url: Mapped[str | None] = mapped_column(
         String(500),
         nullable=True,
+    )
+
+    resume_text: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
+    )
+
+    skills: Mapped[str] = mapped_column(
+        Text,
+        default="",
+        nullable=False,
+    )
+
+    experience_years: Mapped[int] = mapped_column(
+        default=0,
+        nullable=False,
     )
 
     created_at: Mapped[datetime] = mapped_column(

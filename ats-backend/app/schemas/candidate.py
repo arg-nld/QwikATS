@@ -10,6 +10,9 @@ class CandidateCreate(BaseModel):
     email: str
     phone: str | None = None
     resume_url: str | None = None
+    resume_text: str | None = None
+    skills: str = ""
+    experience_years: int = 0
 
 
 class CandidateUpdate(BaseModel):
@@ -18,6 +21,9 @@ class CandidateUpdate(BaseModel):
     email: str | None = None
     phone: str | None = None
     resume_url: str | None = None
+    resume_text: str | None = None
+    skills: str | None = None
+    experience_years: int | None = None
 
 
 class CandidateResponse(BaseModel):
@@ -30,5 +36,8 @@ class CandidateResponse(BaseModel):
     email: str
     phone: str | None
     resume_url: str | None
+    resume_text: str | None
+    skills: str
+    experience_years: int
     created_at: datetime
     updated_at: datetime

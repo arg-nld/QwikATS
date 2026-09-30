@@ -18,11 +18,30 @@ router = APIRouter(
 
 
 @router.get("/", response_model=list[CandidateResponse])
-def get_candidates(db: Session = Depends(get_db)):
-    return db.query(Candidate).all()
+def get_candidates(
+    tenant_id: int | None = None,
+    email: str | None = None,
+    db: Session = Depends(get_db),
+):
+    query = db.query(Candidate)
+
+    if tenant_id is not None:
+        query = query.filter(
+            Candidate.tenant_id == tenant_id
+        )
+
+    if email is not None:
+        query = query.filter(
+            Candidate.email == email
+        )
+
+    return query.all()
 
 
-@router.get("/{candidate_id}", response_model=CandidateResponse)
+@router.get(
+    "/{candidate_id}",
+    response_model=CandidateResponse,
+)
 def get_candidate(
     candidate_id: int,
     db: Session = Depends(get_db),
@@ -42,7 +61,11 @@ def get_candidate(
     return candidate
 
 
-@router.post("/", response_model=CandidateResponse, status_code=201)
+@router.post(
+    "/",
+    response_model=CandidateResponse,
+    status_code=201,
+)
 def create_candidate(
     candidate_data: CandidateCreate,
     db: Session = Depends(get_db),
@@ -70,7 +93,10 @@ def create_candidate(
     return candidate
 
 
-@router.put("/{candidate_id}", response_model=CandidateResponse)
+@router.put(
+    "/{candidate_id}",
+    response_model=CandidateResponse,
+)
 def update_candidate(
     candidate_id: int,
     candidate_data: CandidateUpdate,

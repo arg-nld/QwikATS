@@ -10,6 +10,9 @@ class JobBase(BaseModel):
     location: str | None = None
     employment_type: str | None = None
     status: str = "draft"
+    minimum_experience_years: int = 0
+    required_skills: str = ""
+    preferred_skills: str = ""
 
 
 class JobCreate(JobBase):
@@ -23,6 +26,9 @@ class JobUpdate(BaseModel):
     location: str | None = None
     employment_type: str | None = None
     status: str | None = None
+    minimum_experience_years: int | None = None
+    required_skills: str | None = None
+    preferred_skills: str | None = None
 
 
 class JobResponse(JobBase):

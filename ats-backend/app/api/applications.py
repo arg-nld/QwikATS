@@ -19,11 +19,40 @@ router = APIRouter(
 )
 
 
-@router.get("/", response_model=list[ApplicationResponse])
+@router.get(
+    "/",
+    response_model=list[ApplicationResponse],
+)
 def get_applications(
+    tenant_id: int | None = None,
+    candidate_id: int | None = None,
+    job_id: int | None = None,
+    status: str | None = None,
     db: Session = Depends(get_db),
 ):
-    return db.query(Application).all()
+    query = db.query(Application)
+
+    if tenant_id is not None:
+        query = query.filter(
+            Application.tenant_id == tenant_id
+        )
+
+    if candidate_id is not None:
+        query = query.filter(
+            Application.candidate_id == candidate_id
+        )
+
+    if job_id is not None:
+        query = query.filter(
+            Application.job_id == job_id
+        )
+
+    if status is not None:
+        query = query.filter(
+            Application.status == status
+        )
+
+    return query.all()
 
 
 @router.get(
@@ -82,7 +111,7 @@ def create_application(
     if not candidate:
         raise HTTPException(
             status_code=404,
-            detail="Candidate not found",
+            detail="Candidate not found for this tenant",
         )
 
     job = (
@@ -97,7 +126,7 @@ def create_application(
     if not job:
         raise HTTPException(
             status_code=404,
-            detail="Job not found",
+            detail="Job not found for this tenant",
         )
 
     application = Application(

@@ -1,17 +1,27 @@
 from datetime import datetime
+from enum import Enum
 
 from pydantic import BaseModel, ConfigDict
+
+
+class ApplicationStatus(str, Enum):
+    APPLIED = "applied"
+    SCREENING = "screening"
+    INTERVIEW = "interview"
+    OFFER = "offer"
+    HIRED = "hired"
+    REJECTED = "rejected"
 
 
 class ApplicationCreate(BaseModel):
     tenant_id: int
     candidate_id: int
     job_id: int
-    status: str = "applied"
+    status: ApplicationStatus = ApplicationStatus.APPLIED
 
 
 class ApplicationUpdate(BaseModel):
-    status: str
+    status: ApplicationStatus
 
 
 class ApplicationResponse(BaseModel):
@@ -21,6 +31,6 @@ class ApplicationResponse(BaseModel):
     tenant_id: int
     candidate_id: int
     job_id: int
-    status: str
+    status: ApplicationStatus
     created_at: datetime
     updated_at: datetime

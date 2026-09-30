@@ -14,12 +14,31 @@ router = APIRouter(
 
 
 @router.get("/", response_model=list[JobResponse])
-def get_jobs(db: Session = Depends(get_db)):
-    return db.query(Job).all()
+def get_jobs(
+    tenant_id: int | None = None,
+    status: str | None = None,
+    department: str | None = None,
+    db: Session = Depends(get_db),
+):
+    query = db.query(Job)
+
+    if tenant_id is not None:
+        query = query.filter(Job.tenant_id == tenant_id)
+
+    if status is not None:
+        query = query.filter(Job.status == status)
+
+    if department is not None:
+        query = query.filter(Job.department == department)
+
+    return query.all()
 
 
 @router.get("/{job_id}", response_model=JobResponse)
-def get_job(job_id: int, db: Session = Depends(get_db)):
+def get_job(
+    job_id: int,
+    db: Session = Depends(get_db),
+):
     job = db.query(Job).filter(Job.id == job_id).first()
 
     if not job:

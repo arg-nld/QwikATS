@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import DateTime, ForeignKey, String, Text
+from sqlalchemy import DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database.connection import Base
@@ -48,6 +48,24 @@ class Job(Base):
     status: Mapped[str] = mapped_column(
         String(50),
         default="draft",
+        nullable=False,
+    )
+
+    minimum_experience_years: Mapped[int] = mapped_column(
+        Integer,
+        default=0,
+        nullable=False,
+    )
+
+    required_skills: Mapped[str] = mapped_column(
+        Text,
+        default="",
+        nullable=False,
+    )
+
+    preferred_skills: Mapped[str] = mapped_column(
+        Text,
+        default="",
         nullable=False,
     )
 
