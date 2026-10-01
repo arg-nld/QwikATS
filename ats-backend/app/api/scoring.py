@@ -62,3 +62,60 @@ def score_candidate(
         ),
         **result,
     }
+
+
+@router.get(
+    "/jobs/{job_id}/candidates"
+)
+def rank_candidates(
+    job_id: int,
+    db: Session = Depends(get_db),
+):
+    job = (
+        db.query(Job)
+        .filter(Job.id == job_id)
+        .first()
+    )
+
+    if not job:
+        raise HTTPException(
+            status_code=404,
+            detail="Job not found",
+        )
+
+    candidates = (
+        db.query(Candidate)
+        .filter(
+            Candidate.tenant_id == job.tenant_id
+        )
+        .all()
+    )
+
+    ranked_candidates = []
+
+    for candidate in candidates:
+        result = calculate_compatibility(
+            job,
+            candidate,
+        )
+
+        ranked_candidates.append({
+            "candidate_id": candidate.id,
+            "candidate_name": (
+                f"{candidate.first_name} "
+                f"{candidate.last_name}"
+            ),
+            **result,
+        })
+
+    ranked_candidates.sort(
+        key=lambda candidate: candidate["score"],
+        reverse=True,
+    )
+
+    return {
+        "job_id": job.id,
+        "job_title": job.title,
+        "candidate_count": len(ranked_candidates),
+        "candidates": ranked_candidates,
+    }

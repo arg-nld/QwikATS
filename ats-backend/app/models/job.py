@@ -69,6 +69,21 @@ class Job(Base):
         nullable=False,
     )
 
+    required_skills_weight: Mapped[float] = mapped_column(
+        default=70.0,
+        nullable=False,
+    )
+
+    preferred_skills_weight: Mapped[float] = mapped_column(
+        default=20.0,
+        nullable=False,
+    )
+
+    experience_weight: Mapped[float] = mapped_column(
+        default=10.0,
+        nullable=False,
+    )
+
     created_at: Mapped[datetime] = mapped_column(
         DateTime,
         default=datetime.utcnow,
